@@ -1,0 +1,51 @@
+{
+  "name": "serverless-webpack-babel-example",
+  "version": "1.0.0",
+  "description": "Regionalization",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Wes Duff <wesley.duff@charter.com>",
+  "license": "MIT",
+  "dependencies": {
+    "source-map-support": "^0.5.4"
+  },
+  "devDependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-plugin-source-map-support": "^2.0.1",
+    "babel-preset-env": "^1.6.0",
+    "serverless-offline": "^3.20.1",
+    "serverless-webpack": "^5.3.1",
+    "webpack": "^4.2.0",
+    "webpack-node-externals": "^1.6.0",
+    "jest": "^24.7.1"
+  },
+  "jest": {
+    "testRegex": [
+      "(/__tests__/.*|(\\.|/)(test|spec))\\.[jt]sx?$",
+      "(/__tests__/.*|(\\.|/)(test|spec))\\.js?$"
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
+    "modulePathIgnorePatterns": [
+      "helpers"
+    ],
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "jsx",
+      "node",
+      "mjs"
+    ],
+    "collectCoverageFrom": [
+      "api/**/*.{js,jsx,mjs}",
+      "lib/**/*.{js}",
+      "Packages/**/*.{js}"
+    ],
+    "transformIgnorePatterns": [
+      "/node_modules/(?!raven-ms-utils).+\\.js$"
+    ]
+  }
+}

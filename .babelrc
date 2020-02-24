@@ -1,0 +1,9 @@
+{
+  "comments": false,
+  "presets": [
+    [ "env", { "node": "current" } ]
+  ],
+  "plugins": [
+    "source-map-support"
+  ]
+}

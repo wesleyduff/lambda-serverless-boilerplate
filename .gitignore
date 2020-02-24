@@ -1,0 +1,15 @@
+# package directories
+node_modules
+jspm_packages
+
+# Serverless directories
+.serverless
+
+#IDE
+.idea
+
+#OS
+.DT_STORE
+
+#distribution
+.webpack
