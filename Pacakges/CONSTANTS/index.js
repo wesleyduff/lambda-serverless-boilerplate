@@ -53,5 +53,6 @@ export default {
     ERROR_PARSE: 'parseError',
     ERROR_PROTECT_AND_CHECK: 'protectAndCheckError',
     ERROR_NOT_FOUND: 'notFoundError',
-    ERROR_BAD_DATA: 'badDataError'
+    ERROR_BAD_DATA: 'badDataError',
+    ERROR_LAMBDA_INVOKE: 'lambdaEnvokeError'
 }

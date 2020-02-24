@@ -1,4 +1,4 @@
-service: myservice
+service: raven-ms-lambda-regionalization
 # app and org for use with dashboard.serverless.com
 #app: your-app-name
 #org: your-org-name
@@ -18,6 +18,12 @@ custom:
 provider:
   name: aws
   runtime: nodejs12.x
+  iamRoleStatements:
+    - Effect: Allow
+      Action:
+        - lambda:InvokeFunction
+        - lambda:InvokeAsync
+      Resource: "*"
 
 #package:
 #  individually: true
@@ -33,15 +39,15 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  hello:
-    handler: handler.hello
+  getData:
+    handler: handlers/regionalization_core.init
     environment:
       ENVIRONMENT: dev
     events: # All events associated with this function
       - http:
-          path: hello
+          path: /region
           method: get
-  world:
-    handler: handler2.world
+  callToGetData:
+    handler: handlers/regionalization_data.init
     environment:
       ENVIRONMENT: dev

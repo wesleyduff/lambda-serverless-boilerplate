@@ -1,9 +1,13 @@
 {
   "comments": false,
   "presets": [
-    [ "env", { "node": "6.10" } ]
+    ["@babel/preset-env", {
+      "modules": false
+    }]
   ],
   "plugins": [
+    "@babel/plugin-proposal-class-properties",
+    "@babel/plugin-proposal-export-default-from",
     "source-map-support"
   ]
 }
