@@ -1,7 +1,7 @@
 {
   "comments": false,
   "presets": [
-    [ "env", { "node": "current" } ]
+    [ "env", { "node": "6.10" } ]
   ],
   "plugins": [
     "source-map-support"

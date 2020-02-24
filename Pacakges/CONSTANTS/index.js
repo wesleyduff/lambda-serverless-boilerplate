@@ -42,5 +42,16 @@ export default {
         SP_APP: 'SP_APP',
         EN_US_WEB: 'EN_US_WEB',
         SP_WEB: 'SP_WEB'
-    }
+    },
+    ERROR_INCORRECT_PARAMETERS: 'incorrectParametersError',
+    ERROR_OBJECT_ID_CREATION: 'objectIDCreationError',
+    ERROR_INVALID_TYPE:'invalidTypeError',
+    ERROR_DATABASE: 'databaseError',
+    ERROR_CONDITIONS_NOT_MET: 'conditionsNotMetError',
+    ERROR_BASE_ERROR: 'baseError',
+    ERROR_REQUEST: 'requestError',
+    ERROR_PARSE: 'parseError',
+    ERROR_PROTECT_AND_CHECK: 'protectAndCheckError',
+    ERROR_NOT_FOUND: 'notFoundError',
+    ERROR_BAD_DATA: 'badDataError'
 }
