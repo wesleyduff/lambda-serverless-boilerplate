@@ -11,20 +11,27 @@
     "@babel/polyfill": "^7.8.3",
     "aws-sdk": "^2.625.0",
     "babel-polyfill": "^6.26.0",
+    "mongodb": "^3.5.4",
     "source-map-support": "^0.5.4"
   },
   "devDependencies": {
-    "babel-core": "^6.26.3",
-    "babel-loader": "^8.0.6",
-    "babel-plugin-source-map-support": "^2.1.1",
-    "@babel/preset-env": "^7.8.4",
     "@babel/plugin-proposal-class-properties": "^7.8.3",
     "@babel/plugin-proposal-export-default-from": "^7.8.3",
+    "@babel/plugin-proposal-export-namespace-from": "^7.8.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.8.3",
+    "@babel/preset-env": "^7.8.4",
+    "@babel/preset-stage-0": "^7.8.3",
+    "babel-core": "^6.26.3",
+    "babel-jest": "^25.1.0",
+    "babel-loader": "^8.0.6",
+    "babel-plugin-source-map-support": "^2.1.1",
+    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
+    "babel-plugin-transform-imports": "^2.0.0",
+    "jest": "^24.7.1",
     "serverless-offline": "^3.20.1",
     "serverless-webpack": "^5.3.1",
     "webpack": "^4.2.0",
-    "webpack-node-externals": "^1.6.0",
-    "jest": "^24.7.1"
+    "webpack-node-externals": "^1.6.0"
   },
   "jest": {
     "testRegex": [
@@ -32,7 +39,12 @@
       "(/__tests__/.*|(\\.|/)(test|spec))\\.js?$"
     ],
     "transform": {
-      "^.+\\.js?$": "babel-jest"
+      "^.+\\.js?$": [
+        "babel-jest",
+        {
+          "configFile": "./testConfig/.babelrc"
+        }
+      ]
     },
     "modulePathIgnorePatterns": [
       "helpers"
@@ -43,14 +55,6 @@
       "jsx",
       "node",
       "mjs"
-    ],
-    "collectCoverageFrom": [
-      "api/**/*.{js,jsx,mjs}",
-      "lib/**/*.{js}",
-      "Packages/**/*.{js}"
-    ],
-    "transformIgnorePatterns": [
-      "/node_modules/(?!raven-ms-utils).+\\.js$"
     ]
   }
 }

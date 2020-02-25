@@ -1,5 +1,5 @@
 import * as errors from "./errors";
-import CONSTANTS from './CONSTANTS';
+import * as CONSTANTS from './CONSTANTS';
 
 export {
     CONSTANTS,

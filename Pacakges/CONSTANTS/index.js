@@ -54,5 +54,6 @@ export default {
     ERROR_PROTECT_AND_CHECK: 'protectAndCheckError',
     ERROR_NOT_FOUND: 'notFoundError',
     ERROR_BAD_DATA: 'badDataError',
-    ERROR_LAMBDA_INVOKE: 'lambdaEnvokeError'
+    ERROR_LAMBDA_INVOKE: 'lambdaEnvokeError',
+    ERROR_NOT_YET_IMPLEMENTED: 'notYetImplementedError'
 }
