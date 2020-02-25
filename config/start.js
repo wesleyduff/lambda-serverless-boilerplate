@@ -1,8 +1,9 @@
 const vault = require( '/config/vault/vault.json' );
 module.exports = {
-    service: 'weather-microservice',
-    name: 'Weather Service',
-    apiVersion: 'v2',
+    service: 'regionalization-microservice',
+    name: 'Regionalization Service',
+    env: 'test',
+    apiVersion: 'v1',
     apiGateway: {
         cacheInSeconds : 60
     },
@@ -14,13 +15,5 @@ module.exports = {
         news: 'spectrum-news'
     },
     endpoints: {
-        wsi : {
-            location: {
-                convertZipCodeToLatLong: zipCode => `https://api.weather.com/v3/location/point?postalKey=${zipCode}:US&language=en-US&format=json&apiKey=22d5586ce6f047ef95586ce6f057efac`
-            },
-            daily: {
-                getUrl: (oLatLong, clientID) => `https://api.weather.com/v3/wx/forecast/daily/10day/custom?geocode=${oLatLong.latitude},${oLatLong.longitude}&format=json&units=e&language=en-US&clientId=${clientID}&apiKey=22d5586ce6f047ef95586ce6f057efac`
-            }
-        }
     }
 }

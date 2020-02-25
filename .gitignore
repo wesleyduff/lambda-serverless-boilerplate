@@ -13,3 +13,6 @@ jspm_packages
 
 #distribution
 .webpack
+
+package-lock.json
+yarn.lock
