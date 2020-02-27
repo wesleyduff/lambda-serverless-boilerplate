@@ -1,7 +1,7 @@
 import * as errors from "./errors";
-import CONSTANTS from './CONSTANTS';
 
 export {
-    CONSTANTS,
     errors
 };
+
+export { default as CONSTANTS } from './CONSTANTS'
