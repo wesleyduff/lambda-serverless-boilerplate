@@ -39,15 +39,27 @@ provider:
 #    - exclude-me-dir/**
 
 functions:
-  getData:
-    handler: handlers/regionalization_core.init
+  getStateNode:
+    handler: handlers/regionalization_core.getStateNode
     environment:
       ENVIRONMENT: dev
     events: # All events associated with this function
       - http:
-          path: /region
+          path: region/{state}
           method: get
-  callToGetData:
-    handler: handlers/regionalization_data.init
+          request:
+            parameters:
+              paths:
+                state: true
+  addStateNode:
+    handler: handlers/regionalization_core.addStateNode
     environment:
       ENVIRONMENT: dev
+    events: # All events associated with this function
+      - http:
+          path: region
+          method: post
+          request:
+            parameters:
+              paths:
+                state: true

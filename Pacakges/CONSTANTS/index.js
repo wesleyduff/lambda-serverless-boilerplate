@@ -31,6 +31,12 @@ export default {
         STATE: 'STATE',
         NATIONAL: 'NATIONAL'
     },
+    CONSUMER_COLLECTIONS_ENUM: {
+        NEIGHBORHOODCOLLECTION: 'neighborhoodCollection',
+        MARKETCOLLECTION:'marketCollection',
+        STATECOLLECTION:'stateCollection',
+        NATIONALCOLLECTION: 'nationalCollection'
+    },
     TREE_ENUM: { //order matters and should match CONSUMER_ENUM
         LEVEL_1: 'LEVEL_1', //level 1 is most granular
         LEVEL_2: 'LEVEL_2',

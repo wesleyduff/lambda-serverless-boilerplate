@@ -1,6 +1,6 @@
 let config = null;
 console.log(`DEBUGGING ---> PROCESS for Config : ENVIRONMENT : ${process.env.ENVIRONMENT} : NODE_EVN : ${process.env.NODE_ENV}`)
-switch (process.env.ENVIRONMENT || process.env.NODE_ENV) {
+switch (process.env.ENVIRONMENT) {
     case 'local': {
         const local = require('./local.js')
         config = local;
@@ -8,12 +8,12 @@ switch (process.env.ENVIRONMENT || process.env.NODE_ENV) {
     }
     case 'start':
     case'test': {
-        const start = require('./start.js')
+        const start = require('./start.js').default
         config = start;
         break;
     }
     case 'dev': {
-        const dev = require('./dev.js')
+        const dev = require('./dev.js').default
         config = dev;
         break;
     }
@@ -42,4 +42,4 @@ switch (process.env.ENVIRONMENT || process.env.NODE_ENV) {
     }
 }
 
-module.exports = config;
+export default config;

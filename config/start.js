@@ -1,5 +1,5 @@
 const vault = require( '/config/vault/vault.json' );
-module.exports = {
+export default {
     service: 'regionalization-microservice',
     name: 'Regionalization Service',
     env: 'test',

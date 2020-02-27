@@ -11,8 +11,8 @@ describe('Testing the connection to a mock mongo service ---> ', () => {
         db = null;
 
     beforeAll(async (done) => {
-        mongoConnectService = new MongoConnectService();
-        db = await mongoConnectService.connect(config);
+        //mongoConnectService = new MongoConnectService();
+        db = await MongoConnectService.connect(config);
         done();
     })
 

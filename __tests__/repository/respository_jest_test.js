@@ -157,8 +157,13 @@ describe('Testing the repository in lib', function() {
         db = null;
 
     beforeAll(async (done) => {
-        mongoConnectService = new MongoConnectService();
-        db = await mongoConnectService.connect(config);
+        if(process.env.ENVIRONMENT === 'test'){
+            const { MongoMemoryServer } = require('mongodb-memory-server');
+            const memoryServer = new MongoMemoryServer();
+            MongoConnectService.setMemoryServer(memoryServer)
+        }
+        //mongoConnectService = new MongoConnectService();
+        db = await MongoConnectService.connect(config);
         done();
     })
 
@@ -191,7 +196,6 @@ describe('Testing the repository in lib', function() {
                     }
 
                     console.log(`Result from insert : ${utils.inspect(result)}`);
-                    expect(true).toBe(true)
                     done();
                 })
 
@@ -230,9 +234,6 @@ describe('Testing the repository in lib', function() {
             expect(resultFind[0].stateCollection.collections[0].zipCodes.includes(78661)).toEqual(true)
         });
 
-        it('should delete level', function () {
-            
-        });
 
     })
 
@@ -250,6 +251,253 @@ describe('Testing the repository in lib', function() {
             const resultFromInsert = await repository.addStateNode(state_co_db_node);
             expect(resultFromInsert.result.n).toEqual(1);
             expect(resultFromInsert.result.ok).toEqual(1);
+        });
+    })
+
+    describe('Testing adding a new MARKET to the MARKET collection for a state node', () => {
+        let repository = null;
+        const ut_state_node_shell =
+            {
+                state: 'UT',
+                level: CONSTANTS.CONSUMER_ENUM.STATE,
+                nationalCollection : nationalCollection,
+                stateCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.STATE,
+                    collections: [
+                    ]
+                },
+                marketCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.MARKET,
+                    collections: [
+
+                    ]
+                },
+                neighborhoodCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.NEIGHBORHOOD,
+                    collections: [
+
+                    ]
+                }
+            }
+
+        //populate db
+        beforeAll((done) => {
+            repository = new Repository(mongoConnectService);
+            db.collection('regionPath')
+                .insert(ut_state_node_shell, (error, result) => {
+                    if(error){
+                        fail(`Failed to insert document : ${utils.inspect(document)} : error : ${utils.inspect(error)}`);
+                        done();
+                    }
+
+                    console.log(`Result from insert -= before add collection to level : ${utils.inspect(result)}`);
+                    done();
+                })
+        })
+
+        it('should add a new MARKET item to the MARKET collection within a state node', async function (done) {
+            expect(ut_state_node_shell.marketCollection.collections.length).toEqual(0);
+            console.log('searching ----')
+            try{
+                const result = await repository.addCollectionToLevelCollection(
+                    {'state': 'UT'},
+                    'marketCollection',
+                    {
+                                zipCodes: [98455],
+                                displayName: 'UT-SaltLake',
+                                languages: [
+                                    CONSTANTS.SUPPORTED_LANGUAGES_ENUM.EN_US_APP
+                                ],
+                                paths:
+                                    {
+                                        [CONSTANTS.SUPPORTED_LANGUAGES_ENUM.SP_APP]: '/us/ut/app/saltlake/sandy?lang=en'
+                                    }
+
+                            }
+                )
+                console.log('found ----')
+                expect(result.value.marketCollection.collections.length).toBe(1)
+                done()
+            } catch(exception){
+                console.log('NOT found ----')
+                fail(`Exception : ALERT : -> new colletion to level collection : exception throw : ${utils.inspect(exception)}`);
+                done()
+            }
+
+        });
+    })
+
+    describe('Testing deleting a MARKET from the MARKET collection for a state node', () => {
+        let repository = null;
+        const wy_state_node_shell =
+            {
+                state: 'WY',
+                level: CONSTANTS.CONSUMER_ENUM.STATE,
+                nationalCollection : nationalCollection,
+                stateCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.STATE,
+                    collections: [
+                    ]
+                },
+                marketCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.MARKET,
+                    collections: [
+                        {
+                            zipCodes: [98455],
+                            displayName: 'WY-HomeTown',
+                            languages: [
+                                CONSTANTS.SUPPORTED_LANGUAGES_ENUM.EN_US_APP
+                            ],
+                            paths:
+                                {
+                                    [CONSTANTS.SUPPORTED_LANGUAGES_ENUM.SP_APP]: '/us/wy/app/hometown/luxington?lang=en'
+                                }
+
+                        }
+                    ]
+                },
+                neighborhoodCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.NEIGHBORHOOD,
+                    collections: [
+
+                    ]
+                }
+            }
+
+        //populate db
+        beforeAll((done) => {
+            repository = new Repository(mongoConnectService);
+            db.collection('regionPath')
+                .insert(wy_state_node_shell, (error, result) => {
+                    if(error){
+                        fail(`Failed to insert document : ${utils.inspect(document)} : error : ${utils.inspect(error)}`);
+                        done();
+                    }
+
+                    console.log(`Result from insert -= before add collection to level : ${utils.inspect(result)}`);
+                    done();
+                })
+        })
+
+        it('should delete a MARKET item from the MARKET collection within a state node', async function (done) {
+            console.log('searching ----')
+            try{
+                const beforeRemoval = await repository.getStateNode('WY')
+                const result = await repository.deleteCollectionFromLevelCollectionCollections(
+                    {'state': 'WY'},
+                    'marketCollection',
+                    {'displayName': 'WY-HomeTown' }
+                )
+                console.log('found ----')
+                expect(beforeRemoval[0].marketCollection.collections.length).toBe(1);
+                expect(result.value.marketCollection.collections.length).toBe(0);
+                done()
+            } catch(exception){
+                console.log('NOT found ----')
+                fail(`Exception : ALERT : -> new colletion to level collection : exception throw : ${utils.inspect(exception)}`);
+                done()
+            }
+
+        });
+    })
+
+    describe('Testing removing a zip code from a levelCollection collections zip code array', () => {
+        let repository = null;
+        const wy_state_node_shell =
+            {
+                state: 'NY',
+                level: CONSTANTS.CONSUMER_ENUM.STATE,
+                nationalCollection : nationalCollection,
+                stateCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.STATE,
+                    collections: [
+                    ]
+                },
+                marketCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.MARKET,
+                    collections: [
+                        {
+                            zipCodes: [98455, 78660],
+                            displayName: 'NY-HomeTown',
+                            languages: [
+                                CONSTANTS.SUPPORTED_LANGUAGES_ENUM.EN_US_APP
+                            ],
+                            paths:
+                                {
+                                    [CONSTANTS.SUPPORTED_LANGUAGES_ENUM.SP_APP]: '/us/ny/app/hometown/luxington?lang=en'
+                                }
+
+                        }
+                    ]
+                },
+                neighborhoodCollection: {
+                    level: CONSTANTS.CONSUMER_ENUM.NEIGHBORHOOD,
+                    collections: [
+
+                    ]
+                }
+            }
+
+        //populate db
+        beforeAll((done) => {
+            repository = new Repository(mongoConnectService);
+            db.collection('regionPath')
+                .insert(wy_state_node_shell, (error, result) => {
+                    if(error){
+                        fail(`Failed to insert document : ${utils.inspect(document)} : error : ${utils.inspect(error)}`);
+                        done();
+                    }
+
+                    console.log(`Result from insert -= before add collection to level : ${utils.inspect(result)}`);
+                    done();
+                })
+        })
+
+        it('should remove a zip code from the MARKET collection within a state node', async function (done) {
+            console.log('searching ----')
+            try{
+                const beforeRemoval = await repository.getStateNode('NY');
+                const result = await repository.deleteZipCodeFromLevelCollectionCollections(
+                    {
+                        'state': 'NY',
+                        [`${CONSTANTS.CONSUMER_COLLECTIONS_ENUM.MARKETCOLLECTION}.collections.zipCodes`] : 78660
+                    },
+                    'marketCollection',
+                    78660
+                )
+                console.log('found ----')
+                expect(beforeRemoval[0].marketCollection.collections[0].zipCodes.includes(78660)).toBe(true);
+                expect(result.value.marketCollection.collections[0].zipCodes.includes(78660)).toBe(false);
+                done()
+            } catch(exception){
+                console.log('NOT found ----')
+                fail(`Exception : ALERT : -> new colletion to level collection : exception throw : ${utils.inspect(exception)}`);
+                done()
+            }
+
+        });
+
+        it('should add a zip code to the MARKET collection within a state node', async function (done) {
+            try{
+                const beforeRemoval = await repository.getStateNode('NY');
+                const result = await repository.addZipCodetoLevelCollectionCollections(
+                    {
+                        'state': 'NY',
+                        [`${CONSTANTS.CONSUMER_COLLECTIONS_ENUM.MARKETCOLLECTION}.collections.displayName`] : 'NY-HomeTown'
+                    },
+                    'marketCollection',
+                    90210
+                )
+                console.log('found ----')
+                expect(beforeRemoval[0].marketCollection.collections[0].zipCodes.includes(90210)).toBe(false);
+                expect(result.value.marketCollection.collections[0].zipCodes.includes(90210)).toBe(true);
+                done()
+            } catch(exception){
+                console.log('NOT found ----')
+                fail(`Exception : ALERT : -> Could not add zipcode : exception throw : ${utils.inspect(exception)}`);
+                done()
+            }
+
         });
     })
 

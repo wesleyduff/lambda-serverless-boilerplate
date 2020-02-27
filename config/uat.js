@@ -1,6 +1,6 @@
 const vault = require( '/config/vault/vault.json' );
 
-module.exports = {
+export default {
     service: 'weather-microservice',
     name: 'Weather Service',
     apiVersion: 'v2',
