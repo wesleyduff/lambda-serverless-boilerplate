@@ -13,5 +13,13 @@ export const getStateNode = async event => {
     } catch(exception){
         return Utilities.convertToAwsAPIConsumableStructure(handlers.exceptionHandlers(exception));
     }
-
 };
+
+export const addUpdateStateNode = async event => {
+    try {
+        console.log(`DEBUGGING ---> --- Calling get Data : event : ${utils.inspect(event)}`)
+        return Utilities.convertToAwsAPIConsumableStructure(await Facade.entry_addUpdateStateNode(Utilities.tryParseJSON(event.body)));
+    } catch(exception){
+        return Utilities.convertToAwsAPIConsumableStructure(handlers.exceptionHandlers(exception));
+    }
+}

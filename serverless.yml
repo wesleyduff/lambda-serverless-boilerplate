@@ -51,15 +51,11 @@ functions:
             parameters:
               paths:
                 state: true
-  addStateNode:
-    handler: handlers/regionalization_core.addStateNode
+  addUpdateStateNode:
+    handler: handlers/regionalization_core.addUpdateStateNode
     environment:
       ENVIRONMENT: dev
     events: # All events associated with this function
       - http:
-          path: region
+          path: region/state
           method: post
-          request:
-            parameters:
-              paths:
-                state: true

@@ -112,14 +112,9 @@ describe('Testing the facade - entry points ---> ', () => {
 
     describe('ENDPOINT TESTING ---> ', () => {
 
-        /*
-        Add data to MOCK database
-         */
-        let repository = null;
 
         //populate db
         beforeAll((done) => {
-            repository = new Repository();
             db.collection('regionPath')
                 .insert(state_tx_db_node, (error, result) => {
                     if(error){
@@ -146,6 +141,98 @@ describe('Testing the facade - entry points ---> ', () => {
                 } catch(exception){
                     fail(`Failed : Could not get state node from facade entry point : error => ${utils.inspect(exception)}`);
                     done();
+                }
+            });
+
+
+        })
+        
+        
+        describe('ENDPOINT : POST : /region/state : Add state node to database ---> ', () => {
+
+            it('should add a state node to the database', async function () {
+
+                const state_node_to_add = {
+                    state: 'CO',
+                    level: CONSTANTS.CONSUMER_ENUM.STATE,
+                    nationalCollection : nationalCollection,
+                    stateCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.STATE,
+                        collections: [
+                        ]
+                    },
+                    marketCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.MARKET,
+                        collections: [
+
+                        ]
+                    },
+                    neighborhoodCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.NEIGHBORHOOD,
+                        collections: [
+
+                        ]
+                    }
+                }
+                try{
+                    await Facade._instantiateRepository();
+                    const result = await Facade.entry_addUpdateStateNode(state_node_to_add);
+
+                    expect(result.status).toBe(200);
+                    expect(result.response.updated).toBe(false);
+                    expect(result.response.upsertedID).toBeTruthy()
+
+                }catch(exception){
+                    fail(`ERROR : ALERT : Could not add state node to database : error => ${utils.inspect(exception)}`);
+                }
+            });
+
+            it('should update a state node to the database', async function () {
+
+                const state_node_to_add = {
+                    state: 'CO',
+                    level: CONSTANTS.CONSUMER_ENUM.STATE,
+                    nationalCollection : nationalCollection,
+                    stateCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.STATE,
+                        collections: [
+                            {
+                                zipCodes: [80015],
+                                displayName: 'CO-LEVEL',
+                                languages: [
+                                    CONSTANTS.SUPPORTED_LANGUAGES_ENUM.EN_US_WEB
+                                ],
+                                paths:
+                                    {
+                                        [CONSTANTS.SUPPORTED_LANGUAGES_ENUM.EN_US_WEB] : '/us/CO/web/lone-tree/park_meadows',
+                                    }
+
+                            }
+                        ]
+                    },
+                    marketCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.MARKET,
+                        collections: [
+
+                        ]
+                    },
+                    neighborhoodCollection: {
+                        level: CONSTANTS.CONSUMER_ENUM.NEIGHBORHOOD,
+                        collections: [
+
+                        ]
+                    }
+                }
+                try{
+                    await Facade._instantiateRepository();
+                    const result = await Facade.entry_addUpdateStateNode(state_node_to_add);
+
+                    expect(result.status).toBe(200);
+                    expect(result.response.updated).toBe(true);
+                    expect(result.response.upsertedID).toBeUndefined()
+
+                }catch(exception){
+                    fail(`ERROR : ALERT : Could not add state node to database : error => ${utils.inspect(exception)}`);
                 }
             });
 
