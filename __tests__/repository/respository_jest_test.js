@@ -403,7 +403,7 @@ describe('Testing the repository in lib', function() {
 
     describe('Testing removing a zip code from a levelCollection collections zip code array', () => {
         let repository = null;
-        const wy_state_node_shell =
+        const ny_state_node_shell =
             {
                 state: 'NY',
                 level: CONSTANTS.CONSUMER_ENUM.STATE,
@@ -442,7 +442,7 @@ describe('Testing the repository in lib', function() {
         beforeAll((done) => {
             repository = new Repository(mongoConnectService);
             db.collection('regionPath')
-                .insert(wy_state_node_shell, (error, result) => {
+                .insert(ny_state_node_shell, (error, result) => {
                     if(error){
                         fail(`Failed to insert document : ${utils.inspect(document)} : error : ${utils.inspect(error)}`);
                         done();
@@ -498,6 +498,32 @@ describe('Testing the repository in lib', function() {
                 done()
             }
 
+        });
+
+        it('should replace the whole zip code array with a new zip code array', async function (done) {
+            try{
+                const beforeRemoval = await repository.getStateNode('NY');
+                const result = await repository.updateZipCodeArrayForLevelCollectionCollectionsConsumer(
+                    {
+                        'state': 'NY',
+                        [`${CONSTANTS.CONSUMER_COLLECTIONS_ENUM.MARKETCOLLECTION}.collections.displayName`] : 'NY-HomeTown'
+                    },
+                    'marketCollection',
+                    [1001,1005,1009]
+                )
+                console.log('found ----')
+                expect(beforeRemoval[0].marketCollection.collections[0].zipCodes.includes(90210)).toBe(true);
+                expect(beforeRemoval[0].marketCollection.collections[0].zipCodes.length).toBe(2);
+                expect(result.value.marketCollection.collections[0].zipCodes.length).toBe(3);
+                expect(result.value.marketCollection.collections[0].zipCodes.includes(90210)).toBe(false);
+                expect(result.value.marketCollection.collections[0].zipCodes.includes(1005)).toBe(true);
+                expect(result.value.marketCollection.collections[0].zipCodes.indexOf(1005)).toBe(1);
+                done()
+            } catch(exception){
+                console.log('NOT found ----')
+                fail(`Exception : ALERT : -> Could not add zipcode : exception throw : ${utils.inspect(exception)}`);
+                done()
+            }
         });
     })
 
