@@ -12,14 +12,10 @@ switch (process.env.ENVIRONMENT || 'test') {
         config = start;
         break;
     }
-    case 'dev': {
+    case 'dev':
+    case 'demo':{
         const dev = require('./dev.js').default
         config = dev;
-        break;
-    }
-    case 'engprod': {
-        const engprod = require('./engprod.js')
-        config = engprod;
         break;
     }
     case 'qa': {
@@ -35,6 +31,11 @@ switch (process.env.ENVIRONMENT || 'test') {
     case 'stage': {
         const stage = require('./stage.js')
         config = stage;
+        break;
+    }
+    case 'prod': {
+        const prod = require('./prod.js')
+        config = prod;
         break;
     }
     default: {

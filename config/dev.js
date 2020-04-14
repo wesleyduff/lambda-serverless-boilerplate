@@ -1,32 +1,16 @@
-const vault = require( '/config/vault/vault.json' );
-
-const config = {
-    service: 'weather-microservice',
-    name: 'Weather Service',
-    apiVersion: 'v2',
+const vault = require( '/config/vault/serverless/vault.json' );
+export default {
+    service: 'serverless-microservice',
+    name: 'Serverless Demo Service',
+    env: 'DEV',
+    apiVersion: 'v1',
     apiGateway: {
         cacheInSeconds : 60
     },
-    mongo : {
-      options : {
-          useNewUrlParser: true
-      },
-        url : `mongodb+srv://slysop:Ab34125@cluster0-6iafy.mongodb.net/test?retryWrites=true&w=majority`
-    },
-    mongo_raven: {
-        options: {
-            readPreference: 'nearest',
-            poolSize: 5,
-            w: 'majority',
-            connectWithNoPrimary: true,
-            replicaSet: process.env.REPLICA_SET || 'raven-dev',
-            tlsAllowInvalidCertificates: true,
-        },
-        url: `mongodb://${vault.mongo_auth_userpassword}@raven-mongo:27017/RavenData?ssl=true&sslInvalidHostNameAllowed=true`
+    mongo: {
+        options:{},
+        url: `mongodb+srv://${vault.mongo.username}:${vault.mongo.password}@${vault.mongo.cluster}/test?retryWrites=true&w=majority`
     },
     endpoints: {
-
     }
 }
-
-export default config;

@@ -25,37 +25,16 @@ provider:
         - lambda:InvokeAsync
       Resource: "*"
 
-#package:
-#  individually: true
-
-
-# you can add packaging information here
-#package:
-#  include:
-#    - include-me.js
-#    - include-me-dir/**
-#  exclude:
-#    - exclude-me.js
-#    - exclude-me-dir/**
-
 functions:
-  getStateNode:
-    handler: handlers/regionalization_core.getStateNode
+  getEvents:
+    handler: handlers/core.getEvents
     environment:
-      ENVIRONMENT: dev
+      ENVIRONMENT: demo
     events: # All events associated with this function
       - http:
-          path: region/{state}
+          path: calendar/{calendarEvent}
           method: get
           request:
             parameters:
               paths:
-                state: true
-  addUpdateStateNode:
-    handler: handlers/regionalization_core.addUpdateStateNode
-    environment:
-      ENVIRONMENT: dev
-    events: # All events associated with this function
-      - http:
-          path: region/state
-          method: post
+                calendarEvent: true
